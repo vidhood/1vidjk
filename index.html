@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viral Now</title>
+<title>VideoHub</title>
 
 <link rel="icon" type="image/png" href="/images/favicon.png">
 
@@ -31,19 +31,21 @@ header{
 }
 
 .logo{
-    text-decoration:none;
     color:#0f172a;
     font-size:18px;
     font-weight:bold;
+    cursor:default;
+    user-select:none;
 }
 
 .latest-btn{
-    text-decoration:none;
     background:#0f172a;
     color:#fff;
     padding:12px 24px;
     border-radius:999px;
     font-size:14px;
+    cursor:default;
+    user-select:none;
 }
 
 .container{
@@ -62,12 +64,14 @@ header{
     background:#000;
     border-radius:12px;
     overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,.15);
 }
 
 video{
     width:100%;
     display:block;
     background:#000;
+    object-fit:cover;
 }
 
 .message{
@@ -84,6 +88,7 @@ footer{
 }
 
 @media(max-width:768px){
+
     header{
         padding:14px 16px;
     }
@@ -91,6 +96,7 @@ footer{
     .video-wrapper{
         width:100%;
     }
+
 }
 </style>
 </head>
@@ -108,15 +114,21 @@ footer{
 <main class="container">
 
     <div class="video-wrapper">
+
         <video
             id="video"
             controls
             controlsList="nodownload noplaybackrate"
             disablePictureInPicture
-            preload="metadata">
+            preload="metadata"
+            poster="https://img.magnific.com/premium-vector/neon-sign-thanks-watching-with-brick-wall-background-vector_118419-4424.jpg">
+
             <source id="videoSource" src="" type="video/mp4">
+
             Browser Anda tidak mendukung video.
+
         </video>
+
     </div>
 
     <div class="message" id="status">
@@ -131,8 +143,8 @@ footer{
 
 <script>
 
-// Ambil ID dari URL
-// contoh:
+// Ambil ID Videy dari URL
+// Contoh:
 // watch.html?id=yVNrLzoz1
 
 const params = new URLSearchParams(window.location.search);
@@ -148,19 +160,19 @@ if(videyId){
 
     video.load();
 
-    status.innerHTML = "";
+    status.style.display = "none";
 
 }else{
 
     status.innerHTML = `
-        Tambahkan parameter ID video.<br><br>
+        Tambahkan ID video pada URL.<br><br>
         Contoh:<br>
         ?id=yVNrLzoz1
     `;
+
 }
 
 </script>
 
 </body>
 </html>
-
