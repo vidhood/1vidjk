@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -59,6 +60,7 @@ header{
 }
 
 .video-wrapper{
+    position:relative;
     width:720px;
     max-width:100%;
     background:#000;
@@ -71,7 +73,35 @@ video{
     width:100%;
     display:block;
     background:#000;
-    object-fit:cover;
+}
+
+.video-overlay{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:10;
+}
+
+.play-button{
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    background:rgba(0,0,0,.75);
+    color:#fff;
+    font-size:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.25s;
+    backdrop-filter:blur(4px);
+}
+
+.play-button:hover{
+    transform:scale(1.1);
+    background:rgba(0,0,0,.9);
 }
 
 .message{
@@ -97,8 +127,14 @@ footer{
         width:100%;
     }
 
+    .play-button{
+        width:80px;
+        height:80px;
+        font-size:36px;
+    }
 }
 </style>
+
 </head>
 
 <body>
@@ -106,34 +142,43 @@ footer{
 <header>
     <div class="logo">VideoHub</div>
 
-    <div class="latest-btn">
-        <strong>Latest</strong>
-    </div>
+```
+<div class="latest-btn">
+    <strong>Latest</strong>
+</div>
+```
+
 </header>
 
 <main class="container">
 
-    <div class="video-wrapper">
+```
+<div class="video-wrapper">
 
-        <video
-            id="video"
-            controls
-            controlsList="nodownload noplaybackrate"
-            disablePictureInPicture
-            preload="metadata"
-            poster="https://img.magnific.com/premium-vector/neon-sign-thanks-watching-with-brick-wall-background-vector_118419-4424.jpg">
-
-            <source id="videoSource" src="" type="video/mp4">
-
-            Browser Anda tidak mendukung video.
-
-        </video>
-
+    <div class="video-overlay" id="playOverlay">
+        <div class="play-button">▶</div>
     </div>
 
-    <div class="message" id="status">
-        Memuat video...
-    </div>
+    <video
+        id="video"
+        controls
+        controlsList="nodownload noplaybackrate"
+        disablePictureInPicture
+        preload="metadata"
+        poster="https://img.magnific.com/premium-vector/neon-sign-thanks-watching-with-brick-wall-background-vector_118419-4424.jpg">
+
+        <source id="videoSource" src="" type="video/mp4">
+
+        Browser Anda tidak mendukung video.
+
+    </video>
+
+</div>
+
+<div class="message" id="status">
+    Memuat video...
+</div>
+```
 
 </main>
 
@@ -143,8 +188,7 @@ footer{
 
 <script>
 
-// Ambil ID Videy dari URL
-// Contoh:
+// URL contoh:
 // watch.html?id=yVNrLzoz1
 
 const params = new URLSearchParams(window.location.search);
@@ -153,6 +197,7 @@ const videyId = params.get("id");
 const video = document.getElementById("video");
 const source = document.getElementById("videoSource");
 const status = document.getElementById("status");
+const overlay = document.getElementById("playOverlay");
 
 if(videyId){
 
@@ -169,8 +214,63 @@ if(videyId){
         Contoh:<br>
         ?id=yVNrLzoz1
     `;
-
 }
+
+overlay.addEventListener("click", () => {
+
+    video.play();
+
+    overlay.style.display = "none";
+
+});
+
+video.addEventListener("play", () => {
+
+    overlay.style.display = "none";
+
+});
+
+video.addEventListener("pause", () => {
+
+    if(video.currentTime > 0 && !video.ended){
+        overlay.style.display = "flex";
+    }
+
+});
+
+video.addEventListener("ended", () => {
+
+    overlay.style.display = "flex";
+
+});
+
+document.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+});
+
+document.addEventListener('keydown', function(e){
+
+    if(e.key === "F12"){
+        e.preventDefault();
+    }
+
+    if(e.ctrlKey && e.shiftKey && e.key === "I"){
+        e.preventDefault();
+    }
+
+    if(e.ctrlKey && e.shiftKey && e.key === "J"){
+        e.preventDefault();
+    }
+
+    if(e.ctrlKey && e.key.toLowerCase() === "u"){
+        e.preventDefault();
+    }
+
+});
+
+video.addEventListener('dragstart', function(e){
+    e.preventDefault();
+});
 
 </script>
 
